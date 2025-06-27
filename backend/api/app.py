@@ -229,8 +229,13 @@ async def start_calendar_auth():
 async def calendar_auth_callback(code: str):
     """Handle Google Calendar OAuth callback"""
     try:
+        print(f"🔄 OAuth callback received with code: {code[:20]}...")
+        
         if agent and agent.calendar_service:
+            print("📋 Processing OAuth callback...")
             success = agent.calendar_service.handle_oauth_callback(code)
+            print(f"🎯 OAuth callback result: {success}")
+            
             if success:
                 return HTMLResponse("""
                 <html>
@@ -253,9 +258,30 @@ async def calendar_auth_callback(code: str):
                 </html>
                 """)
             else:
+                print("❌ OAuth callback failed")
                 raise HTTPException(status_code=400, detail="Failed to connect calendar")
         else:
+            print("❌ Agent or calendar service not available")
             raise HTTPException(status_code=500, detail="Calendar service not initialized")
+    except Exception as e:
+        print(f"❌ OAuth callback error: {e}")
+        import traceback
+        traceback.print_exc()
+        return HTMLResponse(f"""
+        <html>
+            <head><title>Connection Error</title></head>
+            <body style="font-family: Arial; text-align: center; padding: 50px; background: #f0f2f6;">
+                <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto;">
+                    <h1 style="color: #dc3545;">❌ Connection Failed</h1>
+                    <p style="color: #333;">Error: {str(e)}</p>
+                    <p style="color: #666;">Please try again or contact support.</p>
+                    <div style="margin-top: 30px;">
+                        <button onclick="window.close()" style="background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 5px; font-size: 16px; cursor: pointer;">Close Window</button>
+                    </div>
+                </div>
+            </body>
+        </html>
+        """)
     except Exception as e:
         return HTMLResponse(f"""
         <html>
@@ -279,32 +305,73 @@ async def calendar_status():
     try:
         calendar_connected = False
         auth_url = "https://tailortalk-production.up.railway.app/auth/calendar"
+        debug_info = {}
         
         if agent and agent.calendar_service:
             try:
                 # Check if calendar is connected
-                calendar_connected = (
-                    agent.calendar_service.service is not None or
-                    agent.calendar_service.credentials is not None
-                )
+                has_credentials = agent.calendar_service.credentials is not None
+                has_service = agent.calendar_service.service is not None
                 
+                debug_info = {
+                    "has_credentials": has_credentials,
+                    "has_service": has_service,
+                    "credentials_expired": False
+                }
+                
+                # Check if credentials are expired
+                if has_credentials:
+                    try:
+                        debug_info["credentials_expired"] = agent.calendar_service.credentials.expired
+                    except:
+                        debug_info["credentials_expired"] = "unknown"
+                
+                calendar_connected = has_credentials and has_service
+                
+                # If connected, verify with a test call
+                if calendar_connected:
+                    try:
+                        # Make a test API call to verify connection
+                        calendar_list = agent.calendar_service.service.calendarList().list().execute()
+                        debug_info["test_call_success"] = True
+                        debug_info["calendar_count"] = len(calendar_list.get('items', []))
+                        print(f"📊 Calendar status verified: {debug_info['calendar_count']} calendars found")
+                    except Exception as test_error:
+                        debug_info["test_call_success"] = False
+                        debug_info["test_error"] = str(test_error)
+                        print(f"⚠️ Calendar test call failed: {test_error}")
+                        # Still consider connected if we have credentials and service
+                        
                 # If not connected, provide auth URL
                 if not calendar_connected:
                     try:
                         auth_url = agent.calendar_service.get_authorization_url()
-                    except:
+                    except Exception as auth_error:
+                        print(f"⚠️ Could not generate auth URL: {auth_error}")
                         auth_url = "https://tailortalk-production.up.railway.app/auth/calendar"
-            except:
+            except Exception as check_error:
+                print(f"⚠️ Error checking calendar status: {check_error}")
                 calendar_connected = False
+                debug_info["check_error"] = str(check_error)
+        else:
+            debug_info["agent_exists"] = agent is not None
+            debug_info["calendar_service_exists"] = agent.calendar_service is not None if agent else False
         
-        return {
+        response = {
             "calendar_connected": calendar_connected,
             "auth_url": auth_url,
             "message": "Calendar connected! ✅" if calendar_connected else "Calendar not connected. Please authorize access.",
             "status": "connected" if calendar_connected else "disconnected"
         }
         
+        # Add debug info in development
+        if not os.getenv('RAILWAY_ENVIRONMENT'):
+            response["debug"] = debug_info
+            
+        return response
+        
     except Exception as e:
+        print(f"❌ Error in calendar_status endpoint: {e}")
         return {
             "calendar_connected": False,
             "auth_url": "https://tailortalk-production.up.railway.app/auth/calendar",

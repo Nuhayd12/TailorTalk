@@ -433,6 +433,7 @@ class GoogleCalendarService:
         try:
             creds_config = self.get_google_credentials()
             if not creds_config:
+                print("❌ No Google credentials configuration found")
                 return False
             
             # Create flow
@@ -443,11 +444,22 @@ class GoogleCalendarService:
             )
             
             # Exchange code for tokens
+            print("🔄 Exchanging authorization code for tokens...")
             flow.fetch_token(code=authorization_code)
             self.credentials = flow.credentials
+            print("🎯 Credentials obtained successfully")
             
             # Initialize service
             self.service = build('calendar', 'v3', credentials=self.credentials)
+            print("🛠️ Calendar service built successfully")
+            
+            # Verify the connection by making a test call
+            try:
+                calendar_list = self.service.calendarList().list().execute()
+                print(f"📋 Found {len(calendar_list.get('items', []))} calendars")
+                print("✅ Calendar connection verified!")
+            except Exception as test_error:
+                print(f"⚠️ Warning: Could not verify calendar connection: {test_error}")
             
             # Save token in production environment (as env var)
             if self._is_production():
@@ -455,14 +467,19 @@ class GoogleCalendarService:
                 print("✅ Calendar connected successfully in production")
             else:
                 # Save token locally for development
-                with open('token.pickle', 'wb') as token:
-                    pickle.dump(self.credentials, token)
-                print("✅ Calendar connected and token saved locally")
+                try:
+                    with open('token.pickle', 'wb') as token:
+                        pickle.dump(self.credentials, token)
+                    print("💾 Calendar connected and token saved locally")
+                except Exception as save_error:
+                    print(f"⚠️ Could not save token locally: {save_error}")
             
             return True
             
         except Exception as e:
             print(f"❌ Error handling OAuth callback: {e}")
+            import traceback
+            traceback.print_exc()
             return False
     
     def _get_redirect_uri(self) -> str:
