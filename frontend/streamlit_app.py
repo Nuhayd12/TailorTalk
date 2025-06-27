@@ -121,6 +121,16 @@ def parse_and_display_structured_data(message_content):
         except json.JSONDecodeError:
             continue
 
+def check_calendar_status():
+    """Check calendar connection status from the backend"""
+    try:
+        response = requests.get(f"{API_BASE_URL}/calendar/status", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return {"calendar_connected": False, "status": "error"}
+    except:
+        return {"calendar_connected": False, "status": "error"}
+
 def send_message(message: str, timezone: str = None) -> Dict:
     """Send message to the API with timezone support"""
     try:
@@ -276,10 +286,14 @@ with st.sidebar:
             backend_tz = health_data.get("current_timezone", "GMT")
             st.info(f"🕐 Backend Timezone: {backend_tz}")
             
-            if health_data.get("calendar_connected"):
+            # Check calendar status separately for more accurate results
+            calendar_status = check_calendar_status()
+            if calendar_status.get("calendar_connected"):
                 st.success("✅ Calendar Connected")
+                st.info("🎉 Ready to schedule meetings!")
             else:
                 st.warning("⚠️ Calendar Not Connected")
+                st.info("👆 Connect your calendar below to start scheduling")
             
             if health_data.get("openai_configured", False):
                 st.success("✅ OpenAI Configured")
@@ -293,10 +307,46 @@ with st.sidebar:
     
     # Calendar Connection Button
     st.markdown("---")
-    if st.button("🔗 Connect Google Calendar", key="sidebar_calendar_connect", use_container_width=True):
-        st.markdown("**Opening calendar authorization...**")
-        st.markdown("[🔗 Click here to authorize your calendar](https://tailortalk-production.up.railway.app/auth/calendar)")
-        st.info("👆 After authorizing, return here and start chatting!")
+    
+    # Check if calendar is already connected
+    calendar_status = check_calendar_status()
+    
+    if calendar_status.get("calendar_connected"):
+        st.success("✅ Calendar Connected!")
+        if st.button("🔄 Reconnect Calendar", key="sidebar_calendar_reconnect", use_container_width=True):
+            st.markdown("""
+            <script>
+            window.open('https://tailortalk-production.up.railway.app/auth/calendar', '_blank', 'width=600,height=700,scrollbars=yes,resizable=yes');
+            </script>
+            """, unsafe_allow_html=True)
+            st.info("📱 Opening authorization window...")
+    else:
+        if st.button("🔗 Connect Google Calendar", key="sidebar_calendar_connect", use_container_width=True):
+            st.markdown("""
+            <script>
+            window.open('https://tailortalk-production.up.railway.app/auth/calendar', '_blank', 'width=600,height=700,scrollbars=yes,resizable=yes');
+            </script>
+            """, unsafe_allow_html=True)
+            st.info("📱 Opening authorization window...")
+            st.markdown("**Manual link:** [🔗 Click here if window didn't open](https://tailortalk-production.up.railway.app/auth/calendar)")
+            
+            # Add auto-refresh to detect when calendar gets connected
+            st.markdown("""
+            <script>
+            // Listen for messages from popup window
+            window.addEventListener('message', function(event) {
+                if (event.data.type === 'calendar_connected' && event.data.success) {
+                    // Refresh the page to update the calendar status
+                    window.location.reload();
+                }
+            });
+            
+            // Auto-refresh every 5 seconds to check calendar status
+            setTimeout(function() {
+                window.location.reload();
+            }, 5000);
+            </script>
+            """, unsafe_allow_html=True)
     
     st.divider()
     
@@ -432,10 +482,15 @@ def display_auth_link(message_content):
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             if st.button("🔗 **Connect Google Calendar**", key="auth_button", use_container_width=True):
-                st.markdown("[Opening authorization page...](https://tailortalk-production.up.railway.app/auth/calendar)")
+                st.markdown("""
+                <script>
+                window.open('https://tailortalk-production.up.railway.app/auth/calendar', '_blank', 'width=600,height=700,scrollbars=yes,resizable=yes');
+                </script>
+                """, unsafe_allow_html=True)
+                st.success("📱 Opening authorization window...")
                 st.balloons()
         
-        st.markdown("**Or copy this link:** https://tailortalk-production.up.railway.app/auth/calendar")
+        st.markdown("**Manual link:** [🔗 Click here if popup didn't open](https://tailortalk-production.up.railway.app/auth/calendar)")
         st.info("👆 After authorizing, return here and try sending your message again!")
         
         # Add helpful instructions

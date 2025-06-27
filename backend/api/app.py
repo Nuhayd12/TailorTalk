@@ -1,13 +1,14 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 import os
-from datetime import datetime
-from dotenv import load_dotenv
 import uuid
 import sys
+import traceback
+from datetime import datetime
+from dotenv import load_dotenv
 
 # Add parent directories to Python path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -215,11 +216,12 @@ async def health_check():
 
 @app.get("/auth/calendar")
 async def start_calendar_auth():
-    """Start Google Calendar OAuth flow"""
+    """Start Google Calendar OAuth flow - redirects to Google OAuth"""
     try:
         if agent and agent.calendar_service:
             auth_url = agent.calendar_service.get_authorization_url()
-            return {"auth_url": auth_url, "message": "Visit this URL to authorize calendar access"}
+            # Redirect to Google OAuth instead of returning JSON
+            return RedirectResponse(url=auth_url)
         else:
             raise HTTPException(status_code=500, detail="Calendar service not initialized")
     except Exception as e:
@@ -244,15 +246,34 @@ async def calendar_auth_callback(code: str):
                         <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto;">
                             <h1 style="color: #28a745;">✅ Calendar Successfully Connected!</h1>
                             <p style="font-size: 18px; color: #333;">Your Google Calendar is now connected to TailorTalk.</p>
-                            <p style="color: #666;">You can close this window and return to the app to start scheduling!</p>
+                            <p style="color: #666;">Returning to the app...</p>
                             <div style="margin-top: 30px;">
-                                <button onclick="window.close()" style="background: #007bff; color: white; border: none; padding: 12px 24px; border-radius: 5px; font-size: 16px; cursor: pointer;">Close Window</button>
+                                <button onclick="closeWindow()" style="background: #007bff; color: white; border: none; padding: 12px 24px; border-radius: 5px; font-size: 16px; cursor: pointer;">Close Window</button>
                             </div>
                         </div>
                         <script>
-                            setTimeout(() => {
+                            function closeWindow() {
+                                // Try to close the window
                                 window.close();
-                            }, 5000);
+                                // If that doesn't work, redirect to the main app
+                                if (!window.closed) {
+                                    window.location.href = 'https://tailortalkagenticai.streamlit.app';
+                                }
+                            }
+                            
+                            // Try to notify parent window if it exists
+                            try {
+                                if (window.opener && !window.opener.closed) {
+                                    window.opener.postMessage({type: 'calendar_connected', success: true}, '*');
+                                }
+                            } catch (e) {
+                                console.log('Could not communicate with parent window');
+                            }
+                            
+                            // Auto-close after 3 seconds
+                            setTimeout(() => {
+                                closeWindow();
+                            }, 3000);
                         </script>
                     </body>
                 </html>
