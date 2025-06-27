@@ -20,7 +20,7 @@ backend/token.pickle
 */token.pickle
 
 # Python Cache
-__pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
 *.so
