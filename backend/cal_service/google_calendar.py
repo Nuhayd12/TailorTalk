@@ -402,3 +402,74 @@ class GoogleCalendarService:
         except HttpError as error:
             print(f"📅 Calendar API error deleting event: {error}")
             return False
+    
+    def get_authorization_url(self) -> str:
+        """
+        Get OAuth authorization URL for Google Calendar
+        """
+        try:
+            creds_config = self.get_google_credentials()
+            if not creds_config:
+                raise Exception("No Google credentials configuration found")
+            
+            # Create flow
+            flow = InstalledAppFlow.from_client_config(
+                creds_config, 
+                self.SCOPES,
+                redirect_uri=self._get_redirect_uri()
+            )
+            
+            auth_url, _ = flow.authorization_url(prompt='consent')
+            return auth_url
+            
+        except Exception as e:
+            print(f"❌ Error creating authorization URL: {e}")
+            raise e
+    
+    def handle_oauth_callback(self, authorization_code: str) -> bool:
+        """
+        Handle OAuth callback and exchange code for tokens
+        """
+        try:
+            creds_config = self.get_google_credentials()
+            if not creds_config:
+                return False
+            
+            # Create flow
+            flow = InstalledAppFlow.from_client_config(
+                creds_config, 
+                self.SCOPES,
+                redirect_uri=self._get_redirect_uri()
+            )
+            
+            # Exchange code for tokens
+            flow.fetch_token(code=authorization_code)
+            self.credentials = flow.credentials
+            
+            # Initialize service
+            self.service = build('calendar', 'v3', credentials=self.credentials)
+            
+            # Save token in production environment (as env var)
+            if self._is_production():
+                # In production, you might want to store this securely
+                print("✅ Calendar connected successfully in production")
+            else:
+                # Save token locally for development
+                with open('token.pickle', 'wb') as token:
+                    pickle.dump(self.credentials, token)
+                print("✅ Calendar connected and token saved locally")
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ Error handling OAuth callback: {e}")
+            return False
+    
+    def _get_redirect_uri(self) -> str:
+        """Get the appropriate redirect URI for current environment"""
+        if self._is_production():
+            # Production Railway URL
+            return "https://tailortalk-production.up.railway.app/auth/callback"
+        else:
+            # Local development
+            return "http://localhost:8000/auth/callback"

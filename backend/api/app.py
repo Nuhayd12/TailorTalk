@@ -189,6 +189,33 @@ async def health_check():
     except Exception as e:
         return {"status": "unhealthy", "error": str(e)}
 
+@app.get("/auth/calendar")
+async def start_calendar_auth():
+    """Start Google Calendar OAuth flow"""
+    try:
+        if agent and agent.calendar_service:
+            auth_url = agent.calendar_service.get_authorization_url()
+            return {"auth_url": auth_url, "message": "Visit this URL to authorize calendar access"}
+        else:
+            raise HTTPException(status_code=500, detail="Calendar service not initialized")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/auth/callback")
+async def calendar_auth_callback(code: str):
+    """Handle Google Calendar OAuth callback"""
+    try:
+        if agent and agent.calendar_service:
+            success = agent.calendar_service.handle_oauth_callback(code)
+            if success:
+                return {"message": "Calendar successfully connected!", "status": "success"}
+            else:
+                raise HTTPException(status_code=400, detail="Failed to connect calendar")
+        else:
+            raise HTTPException(status_code=500, detail="Calendar service not initialized")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
