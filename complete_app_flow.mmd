@@ -1,0 +1,98 @@
+graph TB
+    %% User Interface Layer
+    A[👤 User Input] --> B[🖥️ Streamlit Frontend]
+    B --> C{Input Type?}
+    
+    %% Quick Actions vs Manual Input
+    C -->|Quick Action| D[⚡ Pre-defined Messages]
+    C -->|Manual Input| E[✍️ Natural Language Text]
+    
+    %% Frontend Processing
+    D --> F[📝 Format Request]
+    E --> F
+    F --> G[🌍 Add Timezone Context]
+    G --> H[📡 HTTP POST to FastAPI]
+    
+    %% API Gateway
+    H --> I[🚀 FastAPI Backend /chat]
+    I --> J[🔍 Request Validation]
+    J --> K[📋 Session Management]
+    K --> L{Session Exists?}
+    
+    %% Session Handling
+    L -->|No| M[🆕 Create New Session]
+    L -->|Yes| N[♻️ Load Session History]
+    M --> O[🧠 Initialize Smart Agent]
+    N --> O
+    
+    %% LangChain Agent Processing
+    O --> P[📚 LangChain Agent Executor]
+    P --> Q[🎯 Parse User Intent]
+    Q --> R{Intent Type?}
+    
+    %% Different Tool Paths
+    R -->|Schedule Meeting| S[⏰ search_available_slots]
+    R -->|View Calendar| T[📅 get_calendar_events]
+    R -->|Open Calendar| U[🔗 open_google_calendar]
+    R -->|Book Meeting| V[📝 book_meeting]
+    R -->|Check Time| W[🕐 get_current_time_info]
+    R -->|Change Timezone| X[🌐 change_timezone]
+    
+    %% Google Calendar Integration
+    S --> Y[📊 Google Calendar Service]
+    T --> Y
+    V --> Y
+    Y --> Z[🔐 OAuth2 Authentication]
+    Z --> AA[📋 Google Calendar API]
+    AA --> BB[📈 Process Calendar Data]
+    
+    %% Tool Results Processing
+    BB --> CC[🔄 Return Tool Results]
+    U --> CC
+    W --> CC
+    X --> CC
+    
+    %% Agent Response Generation
+    CC --> DD[🤖 GPT-4 Response Generation]
+    DD --> EE[📝 Format Response with Timezone]
+    EE --> FF[💾 Save to Session History]
+    FF --> GG[📤 Return API Response]
+    
+    %% Frontend Display
+    GG --> HH[🖥️ Streamlit Receives Response]
+    HH --> II[🔄 Update Session State]
+    II --> JJ[💬 Display Chat Message]
+    JJ --> KK{Response Contains?}
+    
+    %% Different Display Types
+    KK -->|Calendar Slots| LL[⏰ Display Available Slots]
+    KK -->|Calendar Events| MM[📅 Display Events List]
+    KK -->|Calendar Link| NN[🔗 Display Clickable Link]
+    KK -->|Error Message| OO[❌ Display Error Info]
+    
+    %% User Actions
+    LL --> PP[👆 User Selects Slot]
+    MM --> QQ[👁️ User Views Events]
+    NN --> RR[🖱️ User Clicks Link]
+    OO --> SS[🔄 User Retries]
+    
+    %% Loop Back
+    PP --> B
+    QQ --> B
+    RR --> TT[🌐 Opens Google Calendar]
+    SS --> B
+    
+    %% Styling
+    classDef userLayer fill:black
+    classDef frontendLayer fill:black
+    classDef apiLayer fill:black
+    classDef agentLayer fill:black
+    classDef toolLayer fill:black
+    classDef calendarLayer fill:black
+    
+    class A,TT userLayer
+    class B,C,D,E,F,G,H,HH,II,JJ,KK,LL,MM,NN,OO,PP,QQ,RR,SS frontendLayer
+    class I,J,K,L,M,N,GG apiLayer
+    class O,P,Q,R,DD,EE,FF agentLayer
+    class S,T,U,V,W,X,CC toolLayer
+    class Y,Z,AA,BB calendarLayer

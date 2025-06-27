@@ -1,0 +1,123 @@
+graph TB
+    %% External Interfaces
+    A[🌐 HTTP Requests] --> B[🚀 FastAPI Application]
+    B --> C[🛡️ CORS Middleware]
+    
+    %% API Endpoints
+    C --> D{Endpoint?}
+    D -->|/health| E[💚 Health Check]
+    D -->|/chat| F[💬 Chat Handler]
+    D -->|/sessions| G[📋 Session Manager]
+    
+    %% Core API Layer
+    F --> H[📝 Request Validation]
+    H --> I[🔍 Pydantic Models]
+    I --> J[📊 ChatRequest Schema]
+    J --> K[🧠 Agent Controller]
+    
+    %% Agent Management
+    K --> L{Agent Type?}
+    L -->|Smart Agent| M[🎯 SmartTailorTalkAgent]
+    L -->|Basic Agent| N[🔄 LangGraphAgent]
+    
+    %% Smart Agent Architecture
+    M --> O[⚙️ Agent Configuration]
+    O --> P[🌍 Timezone Handler]
+    O --> Q[📚 LangChain Executor]
+    O --> R[🛠️ Tool Registry]
+    
+    %% Tool System
+    R --> S[🏷️ @tool Decorators]
+    S --> T[⏰ Calendar Tools]
+    S --> U[🕐 Time Tools]
+    S --> V[🌐 Utility Tools]
+    
+    %% Calendar Tools Detail
+    T --> W[📊 search_available_slots]
+    T --> X[📅 get_calendar_events]
+    T --> Y[📝 book_meeting]
+    T --> Z[🔗 open_google_calendar]
+    T --> AA[✅ verify_meeting_exists]
+    
+    %% Time & Utility Tools
+    U --> BB[🕐 get_current_time_info]
+    U --> CC[🌍 change_timezone]
+    V --> DD[🔄 _parse_smart_date]
+    
+    %% Calendar Service Layer
+    W --> EE[📋 GoogleCalendarService]
+    X --> EE
+    Y --> EE
+    Z --> EE
+    AA --> EE
+    
+    %% Calendar Service Components
+    EE --> FF[🔐 OAuth2 Handler]
+    EE --> GG[📡 Google API Client]
+    EE --> HH[⏰ Slot Finder Logic]
+    EE --> II[📊 Availability Checker]
+    
+    %% Authentication & Security
+    FF --> JJ[🔑 credentials.json]
+    FF --> KK[💾 token.pickle]
+    FF --> LL[🌐 Google OAuth2 Flow]
+    
+    %% Google Calendar API
+    GG --> MM[📅 Google Calendar API]
+    MM --> NN[📋 Events Endpoint]
+    MM --> OO[⏰ FreeBusy Endpoint]
+    MM --> PP[📝 Insert Endpoint]
+    
+    %% Data Processing
+    HH --> QQ[🔄 UTC Conversion]
+    II --> QQ
+    QQ --> RR[🌍 Timezone Transformation]
+    RR --> SS[📊 Business Hours Filter]
+    SS --> TT[📈 Slot Generation]
+    
+    %% Configuration Management
+    O --> UU[⚙️ Config Module]
+    UU --> VV[🌱 Environment Variables]
+    VV --> WW[🔐 .env File]
+    VV --> XX[🏢 Business Settings]
+    
+    %% Session & State Management
+    K --> YY[📝 Session Storage]
+    YY --> ZZ[💾 In-Memory Store]
+    YY --> AAA[🔄 Conversation History]
+    YY --> BBB[🎯 Current Step Tracking]
+    
+    %% Error Handling & Logging
+    M --> CCC[⚠️ Error Handler]
+    CCC --> DDD[📝 Logging System]
+    CCC --> EEE[🔄 Retry Logic]
+    CCC --> FFF[💬 User Feedback]
+    
+    %% Response Processing
+    TT --> GGG[📤 Response Formatter]
+    GGG --> HHH[🕐 Timezone Display]
+    GGG --> III[📊 JSON Serialization]
+    III --> JJJ[🚀 FastAPI Response]
+    
+    %% External Dependencies
+    LL --> KKK[🌐 Google Cloud Console]
+    MM --> KKK
+    Q --> LLL[🤖 OpenAI API]
+    P --> MMM[🌍 pytz Library]
+    
+    %% Styling
+    classDef apiLayer fill:black
+    classDef agentLayer fill:black
+    classDef toolLayer fill:black
+    classDef calendarLayer fill:black
+    classDef configLayer fill:black
+    classDef securityLayer fill:black
+    classDef externalLayer fill:black
+    
+    class A,B,C,D,E,F,G,H,I,J,JJJ apiLayer
+    class K,L,M,N,O,Q,CCC,DDD,EEE,FFF agentLayer
+    class R,S,T,U,V,W,X,Y,Z,AA,BB,CC,DD toolLayer
+    class EE,FF,GG,HH,II,MM,NN,OO,PP,QQ,RR,SS,TT calendarLayer
+    class UU,VV,WW,XX,YY,ZZ,AAA,BBB,GGG,HHH,III configLayer
+    class JJ,KK,LL securityLayer
+    class KKK,LLL,MMM externalLayer
