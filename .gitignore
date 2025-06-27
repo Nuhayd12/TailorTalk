@@ -1,3 +1,98 @@
+# Environment Variables
+.env
 /.env
+backend/api/.env
+backend/.env
+*/.env
+
+# Google OAuth Credentials
+credentials.json
 /credentials.json
+backend/api/credentials.json
+backend/credentials.json
+*/credentials.json
+
+# Google OAuth Tokens
+token.pickle
 /token.pickle
+backend/api/token.pickle
+backend/token.pickle
+*/token.pickle
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary Files
+*.tmp
+*.temp
+.cache/
+
+# API Keys & Secrets (additional security)
+*key.json
+*secret.json
+*config.json
+api_keys.txt
+secrets.txt
+
+# Streamlit
+.streamlit/secrets.toml
+
+# FastAPI
+.pytest_cache/
+
+# Additional Security Files
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
