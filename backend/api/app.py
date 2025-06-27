@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 import os
@@ -125,11 +126,11 @@ async def chat(message: ChatMessage):
         
         if not calendar_connected:
             return ChatResponse(
-                response="🔐 Please connect your Google Calendar first to use TailorTalk! Click the link below to authorize:\n\n🔗 **Connect Calendar**: https://tailortalk-production.up.railway.app/auth/calendar\n\nAfter connecting, you'll be able to schedule meetings, check availability, and manage your calendar through our AI assistant.",
+                response="🔐 **Please connect your Google Calendar first to use TailorTalk!**\n\nClick this link to authorize your calendar:\n\nhttps://tailortalk-production.up.railway.app/auth/calendar\n\n📋 **Steps:**\n1. Click the link above\n2. Sign in to your Google account\n3. Allow TailorTalk to access your calendar\n4. Return here and start chatting!\n\nAfter connecting, you'll be able to schedule meetings, check availability, and manage your calendar through our AI assistant.",
                 session_id=session_id,
                 conversation_history=[
                     {"role": "user", "content": message.message},
-                    {"role": "assistant", "content": "Please connect your Google Calendar first to use TailorTalk! Visit the authorization link to get started."}
+                    {"role": "assistant", "content": "🔐 Please connect your Google Calendar first! Click: https://tailortalk-production.up.railway.app/auth/calendar"}
                 ],
                 current_step="calendar_connection_required",
                 available_slots=[]
@@ -224,20 +225,53 @@ async def start_calendar_auth():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/auth/callback")
+@app.get("/auth/callback", response_class=HTMLResponse)
 async def calendar_auth_callback(code: str):
     """Handle Google Calendar OAuth callback"""
     try:
         if agent and agent.calendar_service:
             success = agent.calendar_service.handle_oauth_callback(code)
             if success:
-                return {"message": "Calendar successfully connected!", "status": "success"}
+                return HTMLResponse("""
+                <html>
+                    <head><title>Calendar Connected!</title></head>
+                    <body style="font-family: Arial; text-align: center; padding: 50px; background: #f0f2f6;">
+                        <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto;">
+                            <h1 style="color: #28a745;">✅ Calendar Successfully Connected!</h1>
+                            <p style="font-size: 18px; color: #333;">Your Google Calendar is now connected to TailorTalk.</p>
+                            <p style="color: #666;">You can close this window and return to the app to start scheduling!</p>
+                            <div style="margin-top: 30px;">
+                                <button onclick="window.close()" style="background: #007bff; color: white; border: none; padding: 12px 24px; border-radius: 5px; font-size: 16px; cursor: pointer;">Close Window</button>
+                            </div>
+                        </div>
+                        <script>
+                            setTimeout(() => {
+                                window.close();
+                            }, 5000);
+                        </script>
+                    </body>
+                </html>
+                """)
             else:
                 raise HTTPException(status_code=400, detail="Failed to connect calendar")
         else:
             raise HTTPException(status_code=500, detail="Calendar service not initialized")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return HTMLResponse(f"""
+        <html>
+            <head><title>Connection Error</title></head>
+            <body style="font-family: Arial; text-align: center; padding: 50px; background: #f0f2f6;">
+                <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto;">
+                    <h1 style="color: #dc3545;">❌ Connection Failed</h1>
+                    <p style="color: #333;">Error: {str(e)}</p>
+                    <p style="color: #666;">Please try again or contact support.</p>
+                    <div style="margin-top: 30px;">
+                        <button onclick="window.close()" style="background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 5px; font-size: 16px; cursor: pointer;">Close Window</button>
+                    </div>
+                </div>
+            </body>
+        </html>
+        """)
 
 @app.get("/calendar/status")
 async def calendar_status():

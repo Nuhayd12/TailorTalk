@@ -193,10 +193,15 @@ def display_conversation():
             </div>
             """, unsafe_allow_html=True)
             
-            # Check for calendar links in the latest assistant message
+            # Check for special content in the latest assistant message
             if i == len(st.session_state.conversation_history) - 1:
-                display_calendar_link(message["content"])
-                parse_and_display_structured_data(message["content"])
+                # Check for authorization links first
+                if "tailortalk-production.up.railway.app/auth/calendar" in message["content"]:
+                    display_auth_link(message["content"])
+                else:
+                    # Check for other calendar links
+                    display_calendar_link(message["content"])
+                    parse_and_display_structured_data(message["content"])
 
 def display_available_slots():
     """Display available time slots with timezone info"""
@@ -285,6 +290,13 @@ with st.sidebar:
     except:
         st.error("❌ API Offline")
         st.info("💡 Start the backend with:\n`python backend/api/app.py`")
+    
+    # Calendar Connection Button
+    st.markdown("---")
+    if st.button("🔗 Connect Google Calendar", key="sidebar_calendar_connect", use_container_width=True):
+        st.markdown("**Opening calendar authorization...**")
+        st.markdown("[🔗 Click here to authorize your calendar](https://tailortalk-production.up.railway.app/auth/calendar)")
+        st.info("👆 After authorizing, return here and start chatting!")
     
     st.divider()
     
@@ -406,3 +418,32 @@ with col2:
 # Footer
 st.markdown("---")
 st.markdown("🚀 **TailorTalk** - Built with FastAPI, Streamlit, LangGraph & GPT-4")
+
+def display_auth_link(message_content):
+    """Extract and display authorization links prominently"""
+    import re
+    
+    # Look for Railway auth URLs
+    auth_pattern = r'https://tailortalk-production\.up\.railway\.app/auth/calendar'
+    if re.search(auth_pattern, message_content):
+        st.markdown("### 🔐 Calendar Authorization Required")
+        st.markdown("**Click the button below to connect your Google Calendar:**")
+        
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if st.button("🔗 **Connect Google Calendar**", key="auth_button", use_container_width=True):
+                st.markdown("[Opening authorization page...](https://tailortalk-production.up.railway.app/auth/calendar)")
+                st.balloons()
+        
+        st.markdown("**Or copy this link:** https://tailortalk-production.up.railway.app/auth/calendar")
+        st.info("👆 After authorizing, return here and try sending your message again!")
+        
+        # Add helpful instructions
+        with st.expander("📋 Step-by-step instructions"):
+            st.markdown("""
+            1. **Click** the "Connect Google Calendar" button above
+            2. **Sign in** to your Google account if prompted
+            3. **Allow** TailorTalk to access your calendar
+            4. **Return** to this page
+            5. **Send your message** again - it will work!
+            """)
