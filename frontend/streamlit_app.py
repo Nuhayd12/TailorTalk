@@ -113,16 +113,6 @@ if st.session_state.waiting_for_calendar:
         <script>
         let countdown = 8;
         const timer = document.getElementById('timer');
-        
-        const interval = setInterval(function() {
-            countdown--;
-            if (timer) timer.textContent = countdown;
-            
-            if (countdown <= 0) {
-                clearInterval(interval);
-                window.location.reload();
-            }
-        }, 1000);
         </script>
         """, unsafe_allow_html=True)
 
