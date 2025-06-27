@@ -1,0 +1,253 @@
+
+[     UTC     ] Logs for tailortalkagenticai.streamlit.app/
+────────────────────────────────────────────────────────────────────────────────────────
+[14:48:12] 🖥 Provisioning machine...
+[14:48:12] 🎛 Preparing system...
+[14:48:12] ⛓ Spinning up manager process...
+[14:48:12] 🚀 Starting up repository: 'tailortalk', branch: 'main', main module: 'frontend/streamlit_app.py'
+[14:48:12] 🐙 Cloning repository...
+[14:48:13] 🐙 Cloning into '/mount/src/tailortalk'...
+
+[14:48:13] 🐙 Cloned repository!
+[14:48:13] 🐙 Pulling code changes from Github...
+[14:48:13] 📦 Processing dependencies...
+
+──────────────────────────────────────── uv ───────────────────────────────────────────
+
+Using uv pip install.
+Using Python 3.13.5 environment at /home/adminuser/venv
+  × No solution found when resolving dependencies:
+  ╰─▶ Because only the following versions of pydantic are available:
+          pydantic<=2.7.4
+          pydantic>=2.8.0,<=2.8.2
+          pydantic>=2.9.0,<=2.9.2
+          pydantic>=2.10.0,<=2.10.6
+          pydantic>=2.11.0
+      and langchain-core==0.2.23 depends on pydantic>=2.7.4, we can conclude
+      that langchain-core==0.2.23 depends on one of:
+          pydantic==2.7.4
+          pydantic>=2.8.0,<=2.8.2
+          pydantic>=2.9.0,<=2.9.2
+          pydantic>=2.10.0,<=2.10.6
+          pydantic>=2.11.0
+
+      And because you require pydantic==2.5.0 and langchain-core==0.2.23, we
+      can conclude that your requirements are unsatisfiable.
+Checking if Streamlit is installed
+Installing rich for an improved exception logging
+Using uv pip install.
+Using Python 3.13.5 environment at /home/adminuser/venv
+Resolved 4 packages in 113ms
+Prepared 4 packages in 147ms
+Installed 4 packages in 26ms
+ + markdown-it-py==3.0.0
+ + mdurl==0.1.2
+ + pygments==2.19.2
+ + rich==14.0.0
+
+────────────────────────────────────────────────────────────────────────────────────────
+
+
+──────────────────────────────────────── pip ───────────────────────────────────────────
+
+Using standard pip install.
+Collecting fastapi==0.104.1 (from -r /mount/src/tailortalk/requirements.txt (line 2))
+  Downloading fastapi-0.104.1-py3-none-any.whl.metadata (24 kB)
+Collecting uvicorn==0.24.0 (from -r /mount/src/tailortalk/requirements.txt (line 3))
+  Downloading uvicorn-0.24.0-py3-none-any.whl.metadata (6.4 kB)
+Collecting streamlit==1.28.1 (from -r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading streamlit-1.28.1-py2.py3-none-any.whl.metadata (8.1 kB)
+Collecting google-api-python-client==2.108.0 (from -r /mount/src/tailortalk/requirements.txt (line 7))
+  Downloading google_api_python_client-2.108.0-py2.py3-none-any.whl.metadata (6.6 kB)
+Collecting google-auth-httplib2==0.1.1 (from -r /mount/src/tailortalk/requirements.txt (line 8))
+  Downloading google_auth_httplib2-0.1.1-py2.py3-none-any.whl.metadata (2.1 kB)
+Collecting google-auth-oauthlib==1.1.0 (from -r /mount/src/tailortalk/requirements.txt (line 9))
+  Downloading google_auth_oauthlib-1.1.0-py2.py3-none-any.whl.metadata (2.7 kB)
+Collecting google-auth==2.23.4 (from -r /mount/src/tailortalk/requirements.txt (line 10))
+  Downloading google_auth-2.23.4-py2.py3-none-any.whl.metadata (4.7 kB)
+Collecting pydantic==2.5.0 (from -r /mount/src/tailortalk/requirements.txt (line 13))
+  Downloading pydantic-2.5.0-py3-none-any.whl.metadata (174 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 174.6/174.6 kB 13.2 MB/s eta 0:00:00[2025-06-27 14:48:17.311638] 
+Collecting pydantic-settings==2.1.0 (from -r /mount/src/tailortalk/requirements.txt (line 14))
+  Downloading pydantic_settings-2.1.0-py3-none-any.whl.metadata (2.9 kB)
+Collecting langchain==0.2.11 (from -r /mount/src/tailortalk/requirements.txt (line 17))
+  Downloading langchain-0.2.11-py3-none-any.whl.metadata (7.1 kB)
+Collecting langchain-core==0.2.23 (from -r /mount/src/tailortalk/requirements.txt (line 18))
+  Downloading langchain_core-0.2.23-py3-none-any.whl.metadata (6.2 kB)
+Collecting langchain-openai==0.1.17 (from -r /mount/src/tailortalk/requirements.txt (line 19))
+  Downloading langchain_openai-0.1.17-py3-none-any.whl.metadata (2.5 kB)
+Collecting langgraph==0.1.15 (from -r /mount/src/tailortalk/requirements.txt (line 20))
+  Downloading langgraph-0.1.15-py3-none-any.whl.metadata (13 kB)
+Collecting python-multipart==0.0.6 (from -r /mount/src/tailortalk/requirements.txt (line 23))
+  Downloading python_multipart-0.0.6-py3-none-any.whl.metadata (2.5 kB)
+Collecting python-dateutil==2.8.2 (from -r /mount/src/tailortalk/requirements.txt (line 24))
+  Downloading python_dateutil-2.8.2-py2.py3-none-any.whl.metadata (8.2 kB)
+Collecting pytz==2023.3 (from -r /mount/src/tailortalk/requirements.txt (line 25))
+  Downloading pytz-2023.3-py2.py3-none-any.whl.metadata (22 kB)
+Collecting python-dotenv==1.0.0 (from -r /mount/src/tailortalk/requirements.txt (line 26))
+  Downloading python_dotenv-1.0.0-py3-none-any.whl.metadata (21 kB)
+Collecting pytest==7.4.3 (from -r /mount/src/tailortalk/requirements.txt (line 29))
+  Downloading pytest-7.4.3-py3-none-any.whl.metadata (7.9 kB)
+Collecting pytest-asyncio==0.21.1 (from -r /mount/src/tailortalk/requirements.txt (line 30))
+  Downloading pytest_asyncio-0.21.1-py3-none-any.whl.metadata (4.0 kB)
+Collecting anyio<4.0.0,>=3.7.1 (from fastapi==0.104.1->-r /mount/src/tailortalk/requirements.txt (line 2))
+  Downloading anyio-3.7.1-py3-none-any.whl.metadata (4.7 kB)
+Collecting starlette<0.28.0,>=0.27.0 (from fastapi==0.104.1->-r /mount/src/tailortalk/requirements.txt (line 2))
+  Downloading starlette-0.27.0-py3-none-any.whl.metadata (5.8 kB)
+Collecting typing-extensions>=4.8.0 (from fastapi==0.104.1->-r /mount/src/tailortalk/requirements.txt (line 2))
+  Downloading typing_extensions-4.14.0-py3-none-any.whl.metadata (3.0 kB)
+Collecting click>=7.0 (from uvicorn==0.24.0->-r /mount/src/tailortalk/requirements.txt (line 3))
+  Downloading click-8.2.1-py3-none-any.whl.metadata (2.5 kB)
+Collecting h11>=0.8 (from uvicorn==0.24.0->-r /mount/src/tailortalk/requirements.txt (line 3))
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting altair<6,>=4.0 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading altair-5.5.0-py3-none-any.whl.metadata (11 kB)
+Collecting blinker<2,>=1.0.0 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+Collecting cachetools<6,>=4.0 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading cachetools-5.5.2-py3-none-any.whl.metadata (5.4 kB)
+Collecting importlib-metadata<7,>=1.4 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading importlib_metadata-6.11.0-py3-none-any.whl.metadata (4.9 kB)
+Collecting numpy<2,>=1.19.3 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading numpy-1.26.4.tar.gz (15.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.8/15.8 MB 183.4 MB/s eta 0:00:00[2025-06-27 14:48:19.315021] 
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): still running...
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting packaging<24,>=16.8 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading packaging-23.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting pandas<3,>=1.3.0 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading pandas-2.3.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (91 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.2/91.2 kB 187.8 MB/s eta 0:00:00[2025-06-27 14:50:26.498045] 
+Collecting pillow<11,>=7.1.0 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading pillow-10.4.0-cp313-cp313-manylinux_2_28_x86_64.whl.metadata (9.2 kB)
+Collecting protobuf<5,>=3.20 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading protobuf-4.25.8-cp37-abi3-manylinux2014_x86_64.whl.metadata (541 bytes)
+Collecting pyarrow>=6.0 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading pyarrow-20.0.0-cp313-cp313-manylinux_2_28_x86_64.whl.metadata (3.3 kB)
+Collecting requests<3,>=2.27 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading requests-2.32.4-py3-none-any.whl.metadata (4.9 kB)
+Collecting rich<14,>=10.14.0 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading rich-13.9.4-py3-none-any.whl.metadata (18 kB)
+Collecting tenacity<9,>=8.1.0 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading tenacity-8.5.0-py3-none-any.whl.metadata (1.2 kB)
+Collecting toml<2,>=0.10.1 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading toml-0.10.2-py2.py3-none-any.whl.metadata (7.1 kB)
+Collecting tzlocal<6,>=1.1 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading tzlocal-5.3.1-py3-none-any.whl.metadata (7.6 kB)
+Collecting validators<1,>=0.2 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading validators-0.35.0-py3-none-any.whl.metadata (3.9 kB)
+Collecting gitpython!=3.1.19,<4,>=3.0.7 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading GitPython-3.1.44-py3-none-any.whl.metadata (13 kB)
+Collecting pydeck<1,>=0.8.0b4 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading pydeck-0.9.1-py2.py3-none-any.whl.metadata (4.1 kB)
+Collecting tornado<7,>=6.0.3 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading tornado-6.5.1-cp39-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.8 kB)
+Collecting watchdog>=2.1.5 (from streamlit==1.28.1->-r /mount/src/tailortalk/requirements.txt (line 4))
+  Downloading watchdog-6.0.0-py3-none-manylinux2014_x86_64.whl.metadata (44 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.3/44.3 kB 118.1 MB/s eta 0:00:00[2025-06-27 14:50:28.010635] 
+Collecting httplib2<1.dev0,>=0.15.0 (from google-api-python-client==2.108.0->-r /mount/src/tailortalk/requirements.txt (line 7))
+  Downloading httplib2-0.22.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0.dev0,>=1.31.5 (from google-api-python-client==2.108.0->-r /mount/src/tailortalk/requirements.txt (line 7))
+  Downloading google_api_core-2.25.1-py3-none-any.whl.metadata (3.0 kB)
+Collecting uritemplate<5,>=3.0.1 (from google-api-python-client==2.108.0->-r /mount/src/tailortalk/requirements.txt (line 7))
+  Downloading uritemplate-4.2.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting requests-oauthlib>=0.7.0 (from google-auth-oauthlib==1.1.0->-r /mount/src/tailortalk/requirements.txt (line 9))
+  Downloading requests_oauthlib-2.0.0-py2.py3-none-any.whl.metadata (11 kB)
+Collecting pyasn1-modules>=0.2.1 (from google-auth==2.23.4->-r /mount/src/tailortalk/requirements.txt (line 10))
+  Downloading pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting rsa<5,>=3.1.4 (from google-auth==2.23.4->-r /mount/src/tailortalk/requirements.txt (line 10))
+  Downloading rsa-4.9.1-py3-none-any.whl.metadata (5.6 kB)
+Collecting annotated-types>=0.4.0 (from pydantic==2.5.0->-r /mount/src/tailortalk/requirements.txt (line 13))
+  Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.14.1 (from pydantic==2.5.0->-r /mount/src/tailortalk/requirements.txt (line 13))
+  Downloading pydantic_core-2.14.1.tar.gz (359 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 359.1/359.1 kB 212.8 MB/s eta 0:00:00[2025-06-27 14:50:29.502290] 
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting PyYAML>=5.3 (from langchain==0.2.11->-r /mount/src/tailortalk/requirements.txt (line 17))
+  Downloading PyYAML-6.0.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.1 kB)
+Collecting SQLAlchemy<3,>=1.4 (from langchain==0.2.11->-r /mount/src/tailortalk/requirements.txt (line 17))
+  Downloading sqlalchemy-2.0.41-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (9.6 kB)
+Collecting aiohttp<4.0.0,>=3.8.3 (from langchain==0.2.11->-r /mount/src/tailortalk/requirements.txt (line 17))
+  Downloading aiohttp-3.12.13-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.6 kB)
+Collecting langchain-text-splitters<0.3.0,>=0.2.0 (from langchain==0.2.11->-r /mount/src/tailortalk/requirements.txt (line 17))
+  Downloading langchain_text_splitters-0.2.4-py3-none-any.whl.metadata (2.3 kB)
+Collecting langsmith<0.2.0,>=0.1.17 (from langchain==0.2.11->-r /mount/src/tailortalk/requirements.txt (line 17))
+  Downloading langsmith-0.1.147-py3-none-any.whl.metadata (14 kB)
+Collecting jsonpatch<2.0,>=1.33 (from langchain-core==0.2.23->-r /mount/src/tailortalk/requirements.txt (line 18))
+  Downloading jsonpatch-1.33-py2.py3-none-any.whl.metadata (3.0 kB)
+INFO: pip is looking at multiple versions of langchain-core to determine which version is compatible with other requirements. This could take a while.
+ERROR: Cannot install -r /mount/src/tailortalk/requirements.txt (line 14), -r /mount/src/tailortalk/requirements.txt (line 17), -r /mount/src/tailortalk/requirements.txt (line 18), -r /mount/src/tailortalk/requirements.txt (line 2) and pydantic==2.5.0 because these package versions have conflicting dependencies.
+
+The conflict is caused by:
+    The user requested pydantic==2.5.0
+    fastapi 0.104.1 depends on pydantic!=1.8, !=1.8.1, !=2.0.0, !=2.0.1, !=2.1.0, <3.0.0 and >=1.7.4
+    pydantic-settings 2.1.0 depends on pydantic>=2.3.0
+    langchain 0.2.11 depends on pydantic<3 and >=1
+    langchain-core 0.2.23 depends on pydantic<3.0.0 and >=2.7.4; python_full_version >= "3.12.4"
+
+To fix this you could try to:
+1. loosen the range of package versions you've specified
+2. remove package versions to allow pip attempt to solve the dependency conflict
+
+ERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/topics/dependency-resolution/#dealing-with-dependency-conflicts
+
+[notice] A new release of pip is available: 24.0 -> 25.1.1
+[notice] To update, run: pip install --upgrade pip
+Checking if Streamlit is installed
+Installing rich for an improved exception logging
+Using standard pip install.
+Collecting rich>=10.14.0
+  Downloading rich-14.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=10.14.0)
+  Downloading markdown_it_py-3.0.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=10.14.0)
+  Downloading pygments-2.19.2-py3-none-any.whl.metadata (2.5 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=10.14.0)
+  Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Downloading rich-14.0.0-py3-none-any.whl (243 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 243.2/243.2 kB 13.8 MB/s eta 0:00:00[2025-06-27 14:50:54.358444] 
+Downloading markdown_it_py-3.0.0-py3-none-any.whl (87 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 87.5/87.5 kB 150.2 MB/s eta 0:00:00[2025-06-27 14:50:54.372124] 
+Downloading pygments-2.19.2-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 80.9 MB/s eta 0:00:00[2025-06-27 14:50:54.404852] 
+Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Installing collected packages: pygments, mdurl, markdown-it-py, rich
+  Attempting uninstall: pygments
+    Found existing installation: Pygments 2.19.2
+    Uninstalling Pygments-2.19.2:
+      Successfully uninstalled Pygments-2.19.2
+  Attempting uninstall: mdurl
+    Found existing installation: mdurl 0.1.2
+    Uninstalling mdurl-0.1.2:
+      Successfully uninstalled mdurl-0.1.2
+  Attempting uninstall: markdown-it-py
+    Found existing installation: markdown-it-py 3.0.0
+    Uninstalling markdown-it-py-3.0.0:
+      Successfully uninstalled markdown-it-py-3.0.0
+  Attempting uninstall: rich
+    Found existing installation: rich 14.0.0
+    Uninstalling rich-14.0.0:
+      Successfully uninstalled rich-14.0.0
+Successfully installed markdown-it-py-3.0.0 mdurl-0.1.2 pygments-2.19.2 rich-14.0.0
+
+[notice] A new release of pip is available: 24.0 -> 25.1.1
+[notice] To update, run: pip install --upgrade pip
+
+────────────────────────────────────────────────────────────────────────────────────────
+
+[14:50:57] ❗️ installer returned a non-zero exit code
+[14:50:57] ❗️ Error during processing dependencies! Please fix the error and push an update, or try restarting the app.

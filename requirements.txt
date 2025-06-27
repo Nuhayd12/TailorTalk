@@ -1,30 +1,36 @@
 # Core API & Web Framework
-fastapi==0.104.1
-uvicorn==0.24.0
-streamlit==1.28.1
+fastapi>=0.104.1
+uvicorn>=0.24.0
+streamlit>=1.28.1
 
 # Google Calendar Integration
-google-api-python-client==2.108.0
-google-auth-httplib2==0.1.1
-google-auth-oauthlib==1.1.0
-google-auth==2.23.4
+google-api-python-client>=2.108.0
+google-auth-httplib2>=0.1.1
+google-auth-oauthlib>=1.1.0
+google-auth>=2.23.4
 
-# Data Models & Validation
-pydantic==2.5.0
-pydantic-settings==2.1.0
+# Data Models & Validation (Compatible versions)
+pydantic>=2.7.4,<3.0.0
+pydantic-settings>=2.1.0
 
-# LangChain & AI (Compatible versions)
-langchain==0.2.11
-langchain-core==0.2.23
-langchain-openai==0.1.17
-langgraph==0.1.15
+# LangChain & AI (Updated compatible versions)
+langchain>=0.2.11
+langchain-core>=0.2.23
+langchain-openai>=0.1.17
+langgraph>=0.1.15
+
+# OpenAI (Required for langchain-openai)
+openai>=1.0.0
 
 # Utilities
-python-multipart==0.0.6
-python-dateutil==2.8.2
-pytz==2023.3
-python-dotenv==1.0.0
+python-multipart>=0.0.6
+python-dateutil>=2.8.2
+pytz>=2023.3
+python-dotenv>=1.0.0
 
-# Testing
-pytest==7.4.3
-pytest-asyncio==0.21.1
+# Testing (Optional for production)
+pytest>=7.4.3
+pytest-asyncio>=0.21.1
+
+# Additional dependencies for Streamlit deployment
+requests>=2.27.0
