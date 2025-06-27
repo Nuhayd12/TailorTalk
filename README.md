@@ -6,19 +6,19 @@ TailorTalk is an intelligent, LLM-powered calendar booking assistant that unders
 
 ## 📋 Table of Contents
 
-  * [🎯 Project Overview](https://www.google.com/search?q=%23-project-overview)
-  * [🏗️ Architecture](https://www.google.com/search?q=%23%EF%B8%8F-architecture)
-  * [✨ Key Features](https://www.google.com/search?q=%23-key-features)
-  * [🔧 Technical Stack](https://www.google.com/search?q=%23-technical-stack)
-  * [📁 Project Structure](https://www.google.com/search?q=%23-project-structure)
-  * [🚀 Installation & Setup](https://www.google.com/search?q=%23-installation--setup)
-  * [🎮 Usage Guide](https://www.google.com/search?q=%23-usage-guide)
-  * [🧪 Testing](https://www.google.com/search?q=%23-testing)
-  * [🛡️ Edge Cases Handled](https://www.google.com/search?q=%23-edge-cases-handled)
-  * [🔮 Future Scope](https://www.google.com/search?q=%23-future-scope)
-  * [⚠️ Security Notice](https://www.google.com/search?q=%23%EF%B8%8F-security-notice)
-  * [🤝 Contributing](https://www.google.com/search?q=%23-contributing)
-  * [📞 Support](https://www.google.com/search?q=%23-support)
+* [🎯 Project Overview](#-project-overview)
+* [🏗️ Architecture](#️-architecture)
+* [✨ Key Features](#-key-features)
+* [🔧 Technical Stack](#-technical-stack)
+* [📁 Project Structure](#-project-structure)
+* [🚀 Installation & Setup](#-installation--setup)
+* [🎮 Usage Guide](#-usage-guide)
+* [🧪 Testing](#-testing)
+* [🛡️ Edge Cases Handled](#-edge-cases-handled)
+* [🔮 Future Scope](#-future-scope)
+* [⚠️ Security Notice](#️-security-notice)
+* [🤝 Contributing](#-contributing)
+* [📞 Support](#-support)
 
 -----
 
