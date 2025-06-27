@@ -7,6 +7,10 @@ from datetime import datetime
 from dotenv import load_dotenv
 import uuid
 
+# Add parent directories to Python path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 # Load environment variables
 load_dotenv()
 
@@ -15,6 +19,8 @@ import sys
 import importlib.util
 
 # Load smart agent module
+from backend.agents.smart_agent import SmartTailorTalkAgent
+from backend.cal_service.google_calendar import GoogleCalendarService
 agent_path = os.path.join(os.path.dirname(__file__), '..', 'agents', 'smart_agent.py')
 spec = importlib.util.spec_from_file_location("smart_agent", agent_path)
 smart_agent_module = importlib.util.module_from_spec(spec)
@@ -45,7 +51,11 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:8501",  # Local development
+        "https://*.streamlit.app",  # Streamlit Cloud
+        "https://tailortalkagenticai.streamlit.app"  # Your specific app
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -173,4 +183,5 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

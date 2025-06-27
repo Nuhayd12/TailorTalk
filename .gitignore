@@ -96,3 +96,8 @@ secrets.txt
 *.crt
 *.p12
 *.pfx
+
+google_token.json
+C:\Users\NUHAYD\TailorTalk\logs-nuhayd12-tailortalk-main-frontend-streamlit_app.py-2025-06-27T14_52_06.015Z.txt
+procfile
+ex_token.py

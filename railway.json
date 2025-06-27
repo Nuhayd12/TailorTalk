@@ -1,9 +1,10 @@
 {
   "build": {
-    "builder": "NIXPACKS"
+    "builder": "NIXPACKS",
+    "buildCommand": "pip install -r requirements.txt"
   },
   "deploy": {
-    "startCommand": "cd backend/api && uvicorn app:app --host 0.0.0.0 --port $PORT",
+    "startCommand": "cd backend/api && python -m uvicorn app:app --host 0.0.0.0 --port $PORT",
     "healthcheckPath": "/health"
   }
 }
