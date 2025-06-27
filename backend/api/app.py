@@ -6,6 +6,13 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 import uuid
+# Import our SMART agent
+import sys
+import importlib.util
+
+# Load smart agent module
+from backend.agents.smart_agent import SmartTailorTalkAgent
+from backend.cal_service.google_calendar import GoogleCalendarService
 
 # Add parent directories to Python path for imports
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -14,13 +21,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 # Load environment variables
 load_dotenv()
 
-# Import our SMART agent
-import sys
-import importlib.util
-
-# Load smart agent module
-from backend.agents.smart_agent import SmartTailorTalkAgent
-from backend.cal_service.google_calendar import GoogleCalendarService
 agent_path = os.path.join(os.path.dirname(__file__), '..', 'agents', 'smart_agent.py')
 spec = importlib.util.spec_from_file_location("smart_agent", agent_path)
 smart_agent_module = importlib.util.module_from_spec(spec)
