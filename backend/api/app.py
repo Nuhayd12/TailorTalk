@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
@@ -112,6 +112,29 @@ async def chat(message: ChatMessage):
                 available_slots=[]
             )
         
+        # Check if calendar is connected
+        calendar_connected = False
+        if agent and agent.calendar_service:
+            try:
+                calendar_connected = (
+                    agent.calendar_service.service is not None or
+                    agent.calendar_service.credentials is not None
+                )
+            except:
+                calendar_connected = False
+        
+        if not calendar_connected:
+            return ChatResponse(
+                response="🔐 Please connect your Google Calendar first to use TailorTalk! Click the link below to authorize:\n\n🔗 **Connect Calendar**: https://tailortalk-production.up.railway.app/auth/calendar\n\nAfter connecting, you'll be able to schedule meetings, check availability, and manage your calendar through our AI assistant.",
+                session_id=session_id,
+                conversation_history=[
+                    {"role": "user", "content": message.message},
+                    {"role": "assistant", "content": "Please connect your Google Calendar first to use TailorTalk! Visit the authorization link to get started."}
+                ],
+                current_step="calendar_connection_required",
+                available_slots=[]
+            )
+        
         # Set timezone if provided and different from current
         if message.timezone and message.timezone != agent.timezone:
             agent.set_timezone(message.timezone)
@@ -215,6 +238,45 @@ async def calendar_auth_callback(code: str):
             raise HTTPException(status_code=500, detail="Calendar service not initialized")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/calendar/status")
+async def calendar_status():
+    """Check if calendar is connected"""
+    try:
+        calendar_connected = False
+        auth_url = "https://tailortalk-production.up.railway.app/auth/calendar"
+        
+        if agent and agent.calendar_service:
+            try:
+                # Check if calendar is connected
+                calendar_connected = (
+                    agent.calendar_service.service is not None or
+                    agent.calendar_service.credentials is not None
+                )
+                
+                # If not connected, provide auth URL
+                if not calendar_connected:
+                    try:
+                        auth_url = agent.calendar_service.get_authorization_url()
+                    except:
+                        auth_url = "https://tailortalk-production.up.railway.app/auth/calendar"
+            except:
+                calendar_connected = False
+        
+        return {
+            "calendar_connected": calendar_connected,
+            "auth_url": auth_url,
+            "message": "Calendar connected! ✅" if calendar_connected else "Calendar not connected. Please authorize access.",
+            "status": "connected" if calendar_connected else "disconnected"
+        }
+        
+    except Exception as e:
+        return {
+            "calendar_connected": False,
+            "auth_url": "https://tailortalk-production.up.railway.app/auth/calendar",
+            "message": f"Error checking calendar status: {str(e)}",
+            "status": "error"
+        }
 
 if __name__ == "__main__":
     import uvicorn
