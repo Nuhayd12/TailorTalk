@@ -1,4 +1,4 @@
-# TailorTalk - AI-Powered Calendar Assistant 🤖
+## TailorTalk - AI-Powered Calendar Assistant 🤖
 
 TailorTalk is an intelligent, LLM-powered calendar booking assistant that understands natural language and automates meeting scheduling with seamless Google Calendar integration. It revolutionizes how you manage your schedule by providing a conversational interface for all your meeting needs.
 
