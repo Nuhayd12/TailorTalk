@@ -88,16 +88,43 @@ if st.session_state.waiting_for_calendar:
         # Force page refresh
         st.rerun()
     else:
-        # Still waiting, show auto-refresh
+        # Still waiting, show auto-refresh with longer timeout and prominent manual link
+        st.warning("⏳ Waiting for calendar connection...")
+        st.info("🔗 **If the popup didn't open automatically, use the manual link below:**")
+        
+        # Prominent manual authorization link
         st.markdown("""
+        <div style="text-align: center; background: #fff3cd; padding: 20px; border-radius: 10px; border: 2px solid #ffc107; margin: 10px 0;">
+            <h3 style="color: #856404; margin: 0;">Manual Authorization</h3>
+            <p style="color: #856404; margin: 10px 0;">Click the link below if the popup window didn't open:</p>
+            <a href="https://tailortalk-production.up.railway.app/auth/calendar" target="_blank" 
+               style="background: #007bff; color: white; padding: 15px 30px; text-decoration: none; 
+                      border-radius: 5px; font-size: 16px; font-weight: bold; display: inline-block;">
+               🔗 Authorize Google Calendar
+            </a>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # JavaScript countdown and auto-refresh
+        st.markdown("""
+        <div id="countdown" style="text-align: center; color: #666; margin: 10px 0; font-size: 14px;">
+            Page will refresh automatically in <span id="timer">8</span> seconds...
+        </div>
         <script>
-        // Auto-refresh every 3 seconds while waiting for calendar
-        setTimeout(function() {
-            window.location.reload();
-        }, 3000);
+        let countdown = 8;
+        const timer = document.getElementById('timer');
+        
+        const interval = setInterval(function() {
+            countdown--;
+            if (timer) timer.textContent = countdown;
+            
+            if (countdown <= 0) {
+                clearInterval(interval);
+                window.location.reload();
+            }
+        }, 1000);
         </script>
         """, unsafe_allow_html=True)
-        st.info("⏳ Waiting for calendar connection... Page will refresh automatically.")
 
 def display_calendar_link(message_content):
     """Extract and display calendar links from assistant messages"""
@@ -357,28 +384,9 @@ with st.sidebar:
             </script>
             """, unsafe_allow_html=True)
             st.info("📱 Opening authorization window...")
-            st.markdown("**Manual link:** [🔗 Click here if window didn't open](https://tailortalk-production.up.railway.app/auth/calendar)")
-            st.info("⏳ After authorizing, this page will refresh automatically!")
+            st.info("⏳ If popup didn't open, you'll see a manual link after refresh!")
             # Trigger immediate rerun to start the auto-refresh loop
             st.rerun()
-            
-            # Add auto-refresh to detect when calendar gets connected
-            st.markdown("""
-            <script>
-            // Listen for messages from popup window
-            window.addEventListener('message', function(event) {
-                if (event.data.type === 'calendar_connected' && event.data.success) {
-                    // Refresh the page to update the calendar status
-                    window.location.reload();
-                }
-            });
-            
-            // Auto-refresh every 5 seconds to check calendar status
-            setTimeout(function() {
-                window.location.reload();
-            }, 5000);
-            </script>
-            """, unsafe_allow_html=True)
     
     st.divider()
     
@@ -535,20 +543,19 @@ def display_auth_link(message_content):
                 </script>
                 """, unsafe_allow_html=True)
                 st.success("📱 Opening authorization window...")
-                st.info("⏳ Page will refresh automatically after authorization!")
+                st.info("⏳ If popup didn't open, you'll see a manual link after refresh!")
                 st.balloons()
                 # Trigger immediate rerun to start the auto-refresh loop
                 st.rerun()
         
-        st.markdown("**Manual link:** [🔗 Click here if popup didn't open](https://tailortalk-production.up.railway.app/auth/calendar)")
-        st.info("👆 After authorizing, return here and try sending your message again!")
+        st.info("� You can also use the sidebar button to connect your calendar!")
         
         # Add helpful instructions
         with st.expander("📋 Step-by-step instructions"):
             st.markdown("""
             1. **Click** the "Connect Google Calendar" button above
-            2. **Sign in** to your Google account if prompted
+            2. **Sign in** to your Google account if prompted  
             3. **Allow** TailorTalk to access your calendar
-            4. **Return** to this page
+            4. **Wait** for the page to refresh automatically
             5. **Send your message** again - it will work!
             """)
