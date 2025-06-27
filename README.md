@@ -189,7 +189,7 @@ OPENAI_API_KEY="your-openai-api-key-here"
 **Start Backend Server:**
 
 ```bash
-python backend/main.py
+unicorn app:app --reload
 ```
 
 The server will start on `http://localhost:8000`.
