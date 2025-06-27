@@ -6,27 +6,35 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 import uuid
-# Import our SMART agent
 import sys
-import importlib.util
-
-# Load smart agent module
-from backend.agents.smart_agent import SmartTailorTalkAgent
-from backend.cal_service.google_calendar import GoogleCalendarService
 
 # Add parent directories to Python path for imports
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+backend_dir = os.path.dirname(current_dir)
+root_dir = os.path.dirname(backend_dir)
+
+# Add paths for imports
+sys.path.insert(0, root_dir)
+sys.path.insert(0, backend_dir)
+sys.path.insert(0, current_dir)
 
 # Load environment variables
 load_dotenv()
 
-agent_path = os.path.join(os.path.dirname(__file__), '..', 'agents', 'smart_agent.py')
-spec = importlib.util.spec_from_file_location("smart_agent", agent_path)
-smart_agent_module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(smart_agent_module)
-
-SmartTailorTalkAgent = smart_agent_module.SmartTailorTalkAgent
+# Import our modules with proper path handling
+try:
+    from agents.smart_agent import SmartTailorTalkAgent
+except ImportError:
+    try:
+        from backend.agents.smart_agent import SmartTailorTalkAgent
+    except ImportError:
+        # Fallback for Railway deployment
+        agent_path = os.path.join(backend_dir, 'agents', 'smart_agent.py')
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("smart_agent", agent_path)
+        smart_agent_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(smart_agent_module)
+        SmartTailorTalkAgent = smart_agent_module.SmartTailorTalkAgent
 
 # Updated Pydantic models for API
 class ChatMessage(BaseModel):

@@ -14,8 +14,25 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 # Import our calendar service
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from cal_service import GoogleCalendarService
+
+# Add proper path handling for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+backend_dir = os.path.dirname(current_dir)
+sys.path.insert(0, backend_dir)
+
+try:
+    from cal_service.google_calendar import GoogleCalendarService
+except ImportError:
+    try:
+        from backend.cal_service.google_calendar import GoogleCalendarService
+    except ImportError:
+        # Fallback path for deployment
+        cal_service_path = os.path.join(backend_dir, 'cal_service', 'google_calendar.py')
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("google_calendar", cal_service_path)
+        cal_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cal_module)
+        GoogleCalendarService = cal_module.GoogleCalendarService
 
 class SmartAgentState(TypedDict):
     """Simplified state management"""
