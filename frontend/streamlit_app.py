@@ -61,7 +61,44 @@ if "current_step" not in st.session_state:
     st.session_state.current_step = "greeting"
 if "timezone" not in st.session_state:
     st.session_state.timezone = "GMT"
-    
+if "waiting_for_calendar" not in st.session_state:
+    st.session_state.waiting_for_calendar = False
+if "last_calendar_check" not in st.session_state:
+    st.session_state.last_calendar_check = None
+
+def check_calendar_status():
+    """Check calendar connection status from the backend"""
+    try:
+        response = requests.get(f"{API_BASE_URL}/calendar/status", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return {"calendar_connected": False, "status": "error"}
+    except:
+        return {"calendar_connected": False, "status": "error"}
+
+# Auto-refresh mechanism for calendar connection
+if st.session_state.waiting_for_calendar:
+    # Check calendar status
+    calendar_status = check_calendar_status()
+    if calendar_status.get("calendar_connected"):
+        # Calendar is now connected!
+        st.session_state.waiting_for_calendar = False
+        st.success("🎉 Calendar connected successfully! Refreshing page...")
+        st.balloons()
+        # Force page refresh
+        st.rerun()
+    else:
+        # Still waiting, show auto-refresh
+        st.markdown("""
+        <script>
+        // Auto-refresh every 3 seconds while waiting for calendar
+        setTimeout(function() {
+            window.location.reload();
+        }, 3000);
+        </script>
+        """, unsafe_allow_html=True)
+        st.info("⏳ Waiting for calendar connection... Page will refresh automatically.")
+
 def display_calendar_link(message_content):
     """Extract and display calendar links from assistant messages"""
     import re
@@ -120,16 +157,6 @@ def parse_and_display_structured_data(message_content):
                     
         except json.JSONDecodeError:
             continue
-
-def check_calendar_status():
-    """Check calendar connection status from the backend"""
-    try:
-        response = requests.get(f"{API_BASE_URL}/calendar/status", timeout=5)
-        if response.status_code == 200:
-            return response.json()
-        return {"calendar_connected": False, "status": "error"}
-    except:
-        return {"calendar_connected": False, "status": "error"}
 
 def send_message(message: str, timezone: str = None) -> Dict:
     """Send message to the API with timezone support"""
@@ -322,6 +349,8 @@ with st.sidebar:
             st.info("📱 Opening authorization window...")
     else:
         if st.button("🔗 Connect Google Calendar", key="sidebar_calendar_connect", use_container_width=True):
+            # Set waiting flag
+            st.session_state.waiting_for_calendar = True
             st.markdown("""
             <script>
             window.open('https://tailortalk-production.up.railway.app/auth/calendar', '_blank', 'width=600,height=700,scrollbars=yes,resizable=yes');
@@ -329,6 +358,9 @@ with st.sidebar:
             """, unsafe_allow_html=True)
             st.info("📱 Opening authorization window...")
             st.markdown("**Manual link:** [🔗 Click here if window didn't open](https://tailortalk-production.up.railway.app/auth/calendar)")
+            st.info("⏳ After authorizing, this page will refresh automatically!")
+            # Trigger immediate rerun to start the auto-refresh loop
+            st.rerun()
             
             # Add auto-refresh to detect when calendar gets connected
             st.markdown("""
@@ -349,6 +381,19 @@ with st.sidebar:
             """, unsafe_allow_html=True)
     
     st.divider()
+    
+    # Manual refresh for calendar status
+    if st.session_state.waiting_for_calendar:
+        st.markdown("### ⏳ Waiting for Calendar Connection")
+        st.info("Authorization window opened. After connecting, click refresh below:")
+        if st.button("🔄 Check Calendar Status", key="refresh_calendar", use_container_width=True):
+            calendar_status = check_calendar_status()
+            if calendar_status.get("calendar_connected"):
+                st.session_state.waiting_for_calendar = False
+                st.success("🎉 Calendar connected!")
+                st.rerun()
+            else:
+                st.warning("⏳ Still waiting for connection...")
     
     # Timezone Selection
     st.header("🌍 Timezone")
@@ -482,13 +527,18 @@ def display_auth_link(message_content):
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             if st.button("🔗 **Connect Google Calendar**", key="auth_button", use_container_width=True):
+                # Set waiting flag
+                st.session_state.waiting_for_calendar = True
                 st.markdown("""
                 <script>
                 window.open('https://tailortalk-production.up.railway.app/auth/calendar', '_blank', 'width=600,height=700,scrollbars=yes,resizable=yes');
                 </script>
                 """, unsafe_allow_html=True)
                 st.success("📱 Opening authorization window...")
+                st.info("⏳ Page will refresh automatically after authorization!")
                 st.balloons()
+                # Trigger immediate rerun to start the auto-refresh loop
+                st.rerun()
         
         st.markdown("**Manual link:** [🔗 Click here if popup didn't open](https://tailortalk-production.up.railway.app/auth/calendar)")
         st.info("👆 After authorizing, return here and try sending your message again!")
