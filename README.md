@@ -192,6 +192,10 @@ OPENAI_API_KEY="your-openai-api-key-here"
 uvicorn app:app --reload
 ```
 
+### Backend server deployed at 
+
+# tailortalk-production.up.railway.app
+
 The server will start on `http://localhost:8000`.
 
 **Start Frontend (New Terminal):**

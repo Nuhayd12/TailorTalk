@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 # API Configuration
-API_BASE_URL = "tailortalk.railway.internal"
+API_BASE_URL = "https://tailortalk-production.up.railway.app"
 
 # Custom CSS for better message display
 st.markdown("""
